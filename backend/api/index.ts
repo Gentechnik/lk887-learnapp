@@ -10,5 +10,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(config.getPort, () => {
-	console.log(`http://localhost:${config.getPort}`);
+	console.log(`http://localhost:${config.getPort()}`);
 });
