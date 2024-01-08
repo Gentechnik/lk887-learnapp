@@ -10,24 +10,30 @@ flashcardRouter.get("/", (_req, res) => {
 
 flashcardRouter.get("/:suuid", (req, res) => {
 	const suuid = req.params.suuid;
-	res.json(`get one flashcard with suuid ${suuid}`);
+	const flashcard = flashcardHandlers.getOneFlashcard(suuid);
+	if (flashcard) {
+		res.json(flashcard);
+	} else {
+		res.status(404).json(`Flashcard with suuid "${suuid}" not found.`);
+	}
 });
 
-flashcardRouter.post("/", (_req, res) => {
-	res.json("create flashcard");
+flashcardRouter.post("/", (req) => {
+	const newFlashcard = req.body;
+	console.log("body", newFlashcard);
 });
 
-flashcardRouter.put(`/:suuid`, (req, res) => {
+flashcardRouter.put("/:suuid", (req, res) => {
 	const suuid = req.params.suuid;
 	res.json(`replace flashcard with suuid ${suuid}`);
 });
 
-flashcardRouter.patch(`/:suuid`, (req, res) => {
+flashcardRouter.patch("/:suuid", (req, res) => {
 	const suuid = req.params.suuid;
 	res.json(`replace fields on flashcard with suuid ${suuid}`);
 });
 
-flashcardRouter.delete(`/:suuid`, (req, res) => {
+flashcardRouter.delete("/:suuid", (req, res) => {
 	const suuid = req.params.suuid;
 	res.json(`delete flashcard with suuid ${suuid}`);
 });
