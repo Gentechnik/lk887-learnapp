@@ -38,7 +38,12 @@ export const PageManageFlashcards = () => {
 	};
 
 	const handleSaveAddFlashcard = () => {
-		saveAddFlashcard(newFlashcard);
+		(async () => {
+			const response = await saveAddFlashcard(newFlashcard);
+			if (response.message === "ok") {
+				handleCancelAddFlashcard();
+			}
+		})();
 	};
 
 	return (
@@ -127,7 +132,7 @@ export const PageManageFlashcards = () => {
 						)}
 						{flashcards.map((flashcard) => {
 							return (
-								<tr>
+								<tr key={flashcard.suuid}>
 									<td>{flashcard.suuid}</td>
 									<td>{flashcard.category}</td>
 									<td>{flashcard.front}</td>

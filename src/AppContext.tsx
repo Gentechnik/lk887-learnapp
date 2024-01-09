@@ -1,10 +1,16 @@
 import { createContext, useEffect, useState } from "react";
-import { IFlashcard, INewFlashcard } from "./shared/interfaces";
+import {
+	IFlashcard,
+	INewFlashcard,
+	IPromiseResolution,
+} from "./shared/interfaces";
 import axios from "axios";
 
 interface IAppContext {
 	flashcards: IFlashcard[];
-	saveAddFlashcard: (newFlashcard: INewFlashcard) => void;
+	saveAddFlashcard: (
+		newFlashcard: INewFlashcard
+	) => Promise<IPromiseResolution>;
 }
 interface IAppProvider {
 	children: React.ReactNode;
@@ -25,18 +31,30 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		})();
 	}, []);
 
-	const saveAddFlashcard = (newflashcard: INewFlashcard) => {
-		const headers = {
-			"Access-Control-Allow-Origin": "*",
-			"Content-Type": "application/json",
-		};
-		(async () => {
-			const response = await axios.post(
-				`${backendUrl}/api/flashcards`,
-				newflashcard,
-				{ headers }
-			);
-		})();
+	const saveAddFlashcard = async (newFlashcard: INewFlashcard) => {
+		return new Promise<IPromiseResolution>((resolve, reject) => {
+			const headers = {
+				"Access-Control-Allow-Origin": "*",
+				"Content-Type": "application/json",
+			};
+			(async () => {
+				const response = await axios.post(
+					`${backendUrl}/api/flashcards`,
+					newFlashcard,
+					{ headers }
+				);
+				if (response.status === 201) {
+					const flashcard: IFlashcard = response.data;
+					flashcards.push(flashcard);
+					setFlashcards(structuredClone(flashcards));
+					resolve({ message: "ok" });
+				} else {
+					reject({
+						message: `ERROR: status code ${response.status}`,
+					});
+				}
+			})();
+		});
 	};
 
 	return (
