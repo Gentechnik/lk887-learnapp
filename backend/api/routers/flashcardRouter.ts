@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as flashcardHandlers from "../handlers/flashcardHandlers";
+import { IFlashcard, INewFlashcard, IPatchFlashcard } from "../../interfaces";
 
 export const flashcardRouter = Router();
 
@@ -18,22 +19,46 @@ flashcardRouter.get("/:suuid", (req, res) => {
 	}
 });
 
-flashcardRouter.post("/", (req) => {
-	const newFlashcard = req.body;
-	console.log("body", newFlashcard);
+flashcardRouter.post("/", async (req, res) => {
+	const newFlashcard: INewFlashcard = req.body;
+	const flashcard = await flashcardHandlers.addFlashcard(newFlashcard);
+	res.json(flashcard);
 });
 
-flashcardRouter.put("/:suuid", (req, res) => {
-	const suuid = req.params.suuid;
-	res.json(`replace flashcard with suuid ${suuid}`);
+flashcardRouter.put("/", async (req, res) => {
+	const flashcard: IFlashcard = req.body;
+	const replacedFlashcard =
+		await flashcardHandlers.replaceFlashcard(flashcard);
+	if (replacedFlashcard) {
+		res.json(replacedFlashcard);
+	} else {
+		res.status(404).json(
+			`Flashcard with suuid "${flashcard.suuid}" not found.`
+		);
+	}
 });
 
-flashcardRouter.patch("/:suuid", (req, res) => {
+flashcardRouter.patch("/:suuid", async (req, res) => {
 	const suuid = req.params.suuid;
-	res.json(`replace fields on flashcard with suuid ${suuid}`);
+	const patchFlashcard: IPatchFlashcard = req.body;
+	const replacedFlashcard =
+		await flashcardHandlers.replaceSomeFieldsInFlashcard(
+			suuid,
+			patchFlashcard
+		);
+	if (replacedFlashcard) {
+		res.json(replacedFlashcard);
+	} else {
+		res.status(404).json(`Flashcard with suuid "${suuid}" not found.`);
+	}
 });
 
-flashcardRouter.delete("/:suuid", (req, res) => {
+flashcardRouter.delete("/:suuid", async (req, res) => {
 	const suuid = req.params.suuid;
-	res.json(`delete flashcard with suuid ${suuid}`);
+	const deletedFlashcard = await flashcardHandlers.deleteFlashcard(suuid);
+	if (deletedFlashcard) {
+		res.json(deletedFlashcard);
+	} else {
+		res.status(404).json(`Flashcard with suuid "${suuid}" not found.`);
+	}
 });
