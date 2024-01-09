@@ -1,9 +1,10 @@
 import { createContext, useEffect, useState } from "react";
-import { IFlashcard } from "./shared/interfaces";
+import { IFlashcard, INewFlashcard } from "./shared/interfaces";
 import axios from "axios";
 
 interface IAppContext {
 	flashcards: IFlashcard[];
+	saveAddFlashcard: (newFlashcard: INewFlashcard) => void;
 }
 interface IAppProvider {
 	children: React.ReactNode;
@@ -24,10 +25,25 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		})();
 	}, []);
 
+	const saveAddFlashcard = (newflashcard: INewFlashcard) => {
+		const headers = {
+			"Access-Control-Allow-Origin": "*",
+			"Content-Type": "application/json",
+		};
+		(async () => {
+			const response = await axios.post(
+				`${backendUrl}/api/flashcards`,
+				newflashcard,
+				{ headers }
+			);
+		})();
+	};
+
 	return (
 		<AppContext.Provider
 			value={{
 				flashcards,
+				saveAddFlashcard,
 			}}
 		>
 			{children}
