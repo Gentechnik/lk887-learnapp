@@ -38,19 +38,26 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				"Content-Type": "application/json",
 			};
 			(async () => {
-				const response = await axios.post(
-					`${backendUrl}/api/flashcards`,
-					newFlashcard,
-					{ headers }
-				);
-				if (response.status === 201) {
-					const flashcard: IFlashcard = response.data;
-					flashcards.push(flashcard);
-					setFlashcards(structuredClone(flashcards));
-					resolve({ message: "ok" });
-				} else {
+				try {
+					const response = await axios.post(
+						`${backendUrl}/api/flashcards`,
+						newFlashcard,
+						{ headers }
+					);
+					if (response.status === 201) {
+						const flashcard: IFlashcard = response.data;
+						flashcards.push(flashcard);
+						const _flashcards = structuredClone(flashcards);
+						setFlashcards(_flashcards);
+						resolve({ message: "ok" });
+					} else {
+						reject({
+							message: `ERROR: status code ${response.status}`,
+						});
+					}
+				} catch (e: any) {
 					reject({
-						message: `ERROR: status code ${response.status}`,
+						message: `ERROR: ${e.message}`,
 					});
 				}
 			})();
