@@ -5,8 +5,8 @@ export const PageManageFlashcards = () => {
 	const { flashcards } = useContext(AppContext);
 	return (
 		<>
-			<p>This is the info page with {flashcards.length} flashcards.</p>;
-			<table>
+			<p>This is the info page with {flashcards.length} flashcards.</p>
+			<table className="dataTable">
 				<thead>
 					<tr>
 						<th>SUUID</th>
