@@ -41,6 +41,7 @@ table.dataTable {
 				border-left: 1px solid $border;
 				padding: 0.5rem;
 				color: #222;
+				height: max-content;
 				&:first-child {
 					font-family: monospace;
 				}
