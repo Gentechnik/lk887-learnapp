@@ -38,14 +38,20 @@ export const PageManageFlashcards = () => {
 	};
 
 	const handleSaveAddFlashcard = () => {
-		(async () => {
-			const response = await saveAddFlashcard(newFlashcard);
-			if (response.message === "ok") {
-				handleCancelAddFlashcard();
-			}
-		})();
+		try {
+			(async () => {
+				const response = await saveAddFlashcard(newFlashcard);
+				if (response.message === "ok") {
+					handleCancelAddFlashcard();
+				}
+			})();
+		} catch (e: any) {
+			console.log(`ERROR: ${e.message}`);
+			alert(
+				"We're sorry, your flashcard could not be saved at this moment."
+			);
+		}
 	};
-
 	return (
 		<>
 			<p>This is the info page with {flashcards.length} flashcards.</p>
