@@ -39,7 +39,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 					..._flashcard,
 					userIsDeleting: false,
 				};
-				_frontendFlashcards.unshift(_frontendFlashcard);
+				_frontendFlashcards.push(_frontendFlashcard);
 			}
 			setFrontendFlashcards(_frontendFlashcards);
 		})();
