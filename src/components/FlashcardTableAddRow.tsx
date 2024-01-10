@@ -1,21 +1,19 @@
-import { ChangeEvent, useContext } from "react";
-import { INewFlashcard } from "../shared/interfaces";
-import { FaRegSave } from "react-icons/fa";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FaSave } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { INewFlashcard, blankNewFlashcard } from "../shared/interfaces";
+import { ChangeEvent, useContext, useState } from "react";
 import { AppContext } from "../AppContext";
 
 interface IProps {
-	newFlashcard: INewFlashcard;
-	setNewFlashcard: (newFlashcard: INewFlashcard) => void;
-	handleCancelAddFlashcard: () => void;
+	setIsAddingFlashcard: (isAddingFlashcard: boolean) => void;
 }
 
-export const FlashcardTableAddRow = ({
-	newFlashcard,
-	setNewFlashcard,
-	handleCancelAddFlashcard,
-}: IProps) => {
+export const FlashcardTableAddRow = ({ setIsAddingFlashcard }: IProps) => {
 	const { saveAddFlashcard } = useContext(AppContext);
+	const [newFlashcard, setNewFlashcard] = useState<INewFlashcard>(
+		structuredClone(blankNewFlashcard)
+	);
 
 	const handleChangeNewFlashcardField = (
 		e: ChangeEvent<HTMLInputElement>,
@@ -31,26 +29,31 @@ export const FlashcardTableAddRow = ({
 				break;
 			case "back":
 				newFlashcard.back = value;
+				break;
 		}
-
 		const _newFlashcard = structuredClone(newFlashcard);
 		setNewFlashcard(_newFlashcard);
 	};
 
 	const handleSaveAddFlashcard = () => {
-		try {
-			(async () => {
+		(async () => {
+			try {
 				const response = await saveAddFlashcard(newFlashcard);
 				if (response.message === "ok") {
 					handleCancelAddFlashcard();
 				}
-			})();
-		} catch (e: any) {
-			console.log(`ERROR: ${e.message}`);
-			alert(
-				"We're sorry, your flashcard could not be saved at this moment."
-			);
-		}
+			} catch (e: any) {
+				console.log(`${e.message}`);
+				alert(
+					"We're sorry, your flashcard cannot be saved at this time. Try again later, or contact 2342-234-23343."
+				);
+			}
+		})();
+	};
+
+	const handleCancelAddFlashcard = () => {
+		setIsAddingFlashcard(false);
+		setNewFlashcard(structuredClone(blankNewFlashcard));
 	};
 
 	return (
@@ -81,7 +84,7 @@ export const FlashcardTableAddRow = ({
 			</td>
 			<td>
 				<div className="flex gap-1">
-					<FaRegSave
+					<FaSave
 						onClick={handleSaveAddFlashcard}
 						className="cursor-pointer hover:text-green-900"
 					/>

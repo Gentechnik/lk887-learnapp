@@ -17,12 +17,12 @@ export const FlashcardTableHead = ({
 				<th>Front</th>
 				<th>Back</th>
 				<th>
-					<div className="flex justify-center">
+					<div className="flex justify-center text-[#222] text-2xl">
 						<SiOneplus
 							onClick={() =>
 								setIsAddingFlashcard(!isAddingFlashcard)
 							}
-							className="hover:text-green-400 cursor-pointer"
+							className="cursor-pointer hover:text-green-900"
 						/>
 					</div>
 				</th>

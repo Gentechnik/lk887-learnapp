@@ -16,6 +16,7 @@ export interface IFlashcard extends INewFlashcard {
 
 export interface IFrontendFlashcard extends IFlashcard {
 	userIsDeleting: boolean;
+	userIsEditing: boolean;
 }
 
 export const convertFrontendFlashcardToFlashcard = (
@@ -32,6 +33,7 @@ export const convertFlashcardToFrontendFlashcard = (
 	return {
 		...flashcard,
 		userIsDeleting: false,
+		userIsEditing: false,
 	};
 };
 

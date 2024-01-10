@@ -1,125 +1,48 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useState } from "react";
 import { AppContext } from "../AppContext";
-import { MdEdit, MdCancel } from "react-icons/md";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import {
-	IFrontendFlashcard,
-	INewFlashcard,
-	blankNewFlashcard,
-	convertFrontendFlashcardToFlashcard,
-} from "../shared/interfaces";
 import { FlashcardTableHead } from "../components/FlashcardTableHead";
 import { FlashcardTableAddRow } from "../components/FlashcardTableAddRow";
+import { FlashcardTableMainRow } from "../components/FlashcardTableMainRow";
+import { FlashcardTableEditRow } from "../components/FlashcardTableEditRow";
 
 export const PageManageFlashcards = () => {
-	const { frontendFlashcards, setFrontendFlashcards, deleteFlashcard } =
-		useContext(AppContext);
+	const { frontendFlashcards } = useContext(AppContext);
 	const [isAddingFlashcard, setIsAddingFlashcard] = useState(false);
-	const [newFlashcard, setNewFlashcard] = useState<INewFlashcard>(
-		structuredClone(blankNewFlashcard)
-	);
-
-	const handleCancelAddFlashcard = () => {
-		setIsAddingFlashcard(false);
-		setNewFlashcard(structuredClone(blankNewFlashcard));
-	};
-
-	const handleSetFlashcardToDeleting = (
-		frontendFlashcard: IFrontendFlashcard
-	) => {
-		frontendFlashcard.userIsDeleting = !frontendFlashcard.userIsDeleting;
-		setFrontendFlashcards(structuredClone(frontendFlashcards));
-	};
-
-	const handleDeleteFlashcard = (frontendFlashcard: IFrontendFlashcard) => {
-		try {
-			(async () => {
-				const flashcard =
-					convertFrontendFlashcardToFlashcard(frontendFlashcard);
-				const response = await deleteFlashcard(flashcard);
-				if (response.message === "ok") {
-					handleCancelAddFlashcard();
-				}
-			})();
-		} catch (e: any) {
-			console.log(`ERROR: ${e.message}`);
-			alert(
-				"We're sorry, your flashcard could not be saved at this moment."
-			);
-		}
-	};
 
 	return (
 		<>
-			<p>
-				This is the info page with {frontendFlashcards.length}{" "}
-				flashcards.
-			</p>
-			<form action="">
+			<p>There are {frontendFlashcards.length} flashcards:</p>
+
+			<form>
 				<table className="dataTable mt-4 w-[60rem]">
 					<FlashcardTableHead
-						isAddingFlashcard={isAddingFlashcard}
 						setIsAddingFlashcard={setIsAddingFlashcard}
+						isAddingFlashcard={isAddingFlashcard}
 					/>
 					<tbody>
 						{isAddingFlashcard && (
 							<FlashcardTableAddRow
-								newFlashcard={newFlashcard}
-								setNewFlashcard={setNewFlashcard}
-								handleCancelAddFlashcard={
-									handleCancelAddFlashcard
-								}
+								setIsAddingFlashcard={setIsAddingFlashcard}
 							/>
 						)}
 						{frontendFlashcards.map((frontendFlashcard) => {
 							return (
-								<tr
-									className={
-										frontendFlashcard.userIsDeleting
-											? "deleting"
-											: ""
-									}
-									key={frontendFlashcard.suuid}
-								>
-									<td>{frontendFlashcard.suuid}</td>
-									<td>{frontendFlashcard.category}</td>
-									<td>{frontendFlashcard.front}</td>
-									<td>{frontendFlashcard.back}</td>
-									<td>
-										{frontendFlashcard.userIsDeleting ? (
-											<div className="flex gap-1">
-												<RiDeleteBin5Line
-													onClick={() =>
-														handleDeleteFlashcard(
-															frontendFlashcard
-														)
-													}
-													className="cursor-pointer hover:text-red-900"
-												/>
-												<MdCancel
-													onClick={() =>
-														handleSetFlashcardToDeleting(
-															frontendFlashcard
-														)
-													}
-													className="cursor-pointer hover:text-yellow-600"
-												/>
-											</div>
-										) : (
-											<div className="flex gap-1">
-												<MdEdit className="cursor-pointer hover:text-green-900" />
-												<RiDeleteBin5Line
-													onClick={() =>
-														handleSetFlashcardToDeleting(
-															frontendFlashcard
-														)
-													}
-													className="cursor-pointer hover:text-red-900"
-												/>
-											</div>
-										)}
-									</td>
-								</tr>
+								<>
+									{frontendFlashcard.userIsEditing ? (
+										<FlashcardTableEditRow
+											frontendFlashcard={
+												frontendFlashcard
+											}
+										/>
+									) : (
+										<FlashcardTableMainRow
+											frontendFlashcard={
+												frontendFlashcard
+											}
+										/>
+									)}
+								</>
 							);
 						})}
 					</tbody>
