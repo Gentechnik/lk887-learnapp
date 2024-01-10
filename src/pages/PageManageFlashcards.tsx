@@ -61,7 +61,7 @@ export const PageManageFlashcards = () => {
 	const handleDeleteFlashcard = (frontendFlashcard: IFlashcard) => {
 		try {
 			(async () => {
-				const response = await deleteFlashcard(flashcard);
+				const response = await deleteFlashcard(frontendFlashcard);
 				if (response.message === "ok") {
 					handleCancelAddFlashcard();
 				}
