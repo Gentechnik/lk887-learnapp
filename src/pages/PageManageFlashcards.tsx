@@ -161,9 +161,11 @@ export const PageManageFlashcards = () => {
 										<div className="flex gap-2 h-full">
 											<MdEdit className="hover:text-green-400 cursor-pointer" />
 											<RiDeleteBin5Line
-												onClick={handleDeleteFlashcard(
-													flashcard
-												)}
+												onClick={() =>
+													handleDeleteFlashcard(
+														flashcard
+													)
+												}
 												className="hover:text-red-500 cursor-pointer"
 											/>
 										</div>
