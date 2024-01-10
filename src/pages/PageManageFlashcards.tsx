@@ -12,8 +12,12 @@ import {
 } from "../shared/interfaces";
 
 export const PageManageFlashcards = () => {
-	const { frontendFlashcards, saveAddFlashcard, deleteFlashcard } =
-		useContext(AppContext);
+	const {
+		frontendFlashcards,
+		setFrontendFlashcards,
+		saveAddFlashcard,
+		deleteFlashcard,
+	} = useContext(AppContext);
 	const [isAddingFlashcard, setIsAddingFlashcard] = useState(false);
 	const [newFlashcard, setNewFlashcard] = useState<INewFlashcard>(
 		structuredClone(blankNewFlashcard)
@@ -57,6 +61,13 @@ export const PageManageFlashcards = () => {
 				"We're sorry, your flashcard could not be saved at this moment."
 			);
 		}
+	};
+
+	const handleSetFlashcardToDeleting = (
+		frontendFlashcard: IFrontendFlashcard
+	) => {
+		frontendFlashcard.userIsDeleting = !frontendFlashcard.userIsDeleting;
+		setFrontendFlashcards(structuredClone(frontendFlashcards));
 	};
 
 	const handleDeleteFlashcard = (frontendFlashcard: IFrontendFlashcard) => {
@@ -166,23 +177,51 @@ export const PageManageFlashcards = () => {
 						)}
 						{frontendFlashcards.map((frontendFlashcard) => {
 							return (
-								<tr key={frontendFlashcard.suuid}>
+								<tr
+									className={
+										frontendFlashcard.userIsDeleting
+											? "deleting"
+											: ""
+									}
+									key={frontendFlashcard.suuid}
+								>
 									<td>{frontendFlashcard.suuid}</td>
 									<td>{frontendFlashcard.category}</td>
 									<td>{frontendFlashcard.front}</td>
 									<td>{frontendFlashcard.back}</td>
 									<td>
-										<div className="flex gap-2 h-full">
-											<MdEdit className="hover:text-green-400 cursor-pointer" />
-											<RiDeleteBin5Line
-												onClick={() =>
-													handleDeleteFlashcard(
-														frontendFlashcard
-													)
-												}
-												className="hover:text-red-500 cursor-pointer"
-											/>
-										</div>
+										{frontendFlashcard.userIsDeleting ? (
+											<div className="flex gap-1">
+												<RiDeleteBin5Line
+													onClick={() =>
+														handleDeleteFlashcard(
+															frontendFlashcard
+														)
+													}
+													className="cursor-pointer hover:text-red-900"
+												/>
+												<MdCancel
+													onClick={() =>
+														handleSetFlashcardToDeleting(
+															frontendFlashcard
+														)
+													}
+													className="cursor-pointer hover:text-yellow-600"
+												/>
+											</div>
+										) : (
+											<div className="flex gap-1">
+												<MdEdit className="cursor-pointer hover:text-green-900" />
+												<RiDeleteBin5Line
+													onClick={() =>
+														handleSetFlashcardToDeleting(
+															frontendFlashcard
+														)
+													}
+													className="cursor-pointer hover:text-red-900"
+												/>
+											</div>
+										)}
 									</td>
 								</tr>
 							);

@@ -10,6 +10,7 @@ import axios from "axios";
 
 interface IAppContext {
 	frontendFlashcards: IFrontendFlashcard[];
+	setFrontendFlashcards: (frontendFlashcards: IFrontendFlashcard[]) => void;
 	saveAddFlashcard: (
 		newFlashcard: INewFlashcard
 	) => Promise<IPromiseResolution>;
@@ -38,7 +39,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 					..._flashcard,
 					userIsDeleting: false,
 				};
-				_frontendFlashcards.push(_frontendFlashcard);
+				_frontendFlashcards.unshift(_frontendFlashcard);
 			}
 			setFrontendFlashcards(_frontendFlashcards);
 		})();
@@ -61,7 +62,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 						const flashcard: IFlashcard = response.data;
 						const frontendFlashcard =
 							convertFlashcardToFrontendFlashcard(flashcard);
-						frontendFlashcards.push(frontendFlashcard);
+						frontendFlashcards.unshift(frontendFlashcard);
 						const _frontendFlashcards =
 							structuredClone(frontendFlashcards);
 						setFrontendFlashcards(_frontendFlashcards);
@@ -114,6 +115,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			value={{
 				frontendFlashcards,
 				saveAddFlashcard,
+				setFrontendFlashcards,
 				deleteFlashcard,
 			}}
 		>

@@ -50,6 +50,10 @@ table.dataTable {
 			&:nth-child(even) td {
 				background-color: darken($dataRowColor, 5%);
 			}
+
+			&.deleting td {
+				background-color: red;
+			}
 		}
 	}
 }
