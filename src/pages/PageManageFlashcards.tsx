@@ -5,9 +5,10 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { SiOneplus } from "react-icons/si";
 import { FaRegSave } from "react-icons/fa";
 import {
-	IFlashcard,
+	IFrontendFlashcard,
 	INewFlashcard,
 	blankNewFlashcard,
+	convertFrontendFlashcardToFlashcard,
 } from "../shared/interfaces";
 
 export const PageManageFlashcards = () => {
@@ -58,10 +59,12 @@ export const PageManageFlashcards = () => {
 		}
 	};
 
-	const handleDeleteFlashcard = (frontendFlashcard: IFlashcard) => {
+	const handleDeleteFlashcard = (frontendFlashcard: IFrontendFlashcard) => {
 		try {
 			(async () => {
-				const response = await deleteFlashcard(frontendFlashcard);
+				const flashcard =
+					convertFrontendFlashcardToFlashcard(frontendFlashcard);
+				const response = await deleteFlashcard(flashcard);
 				if (response.message === "ok") {
 					handleCancelAddFlashcard();
 				}
