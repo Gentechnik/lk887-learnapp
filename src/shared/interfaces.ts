@@ -14,6 +14,27 @@ export interface IFlashcard extends INewFlashcard {
 	suuid: string;
 }
 
+export interface IFrontendFlashcard extends IFlashcard {
+	userIsDeleting: boolean;
+}
+
+export const convertFrontendFlashcardToFlashcard = (
+	frontendFlashcard: IFrontendFlashcard
+): IFlashcard => {
+	return {
+		...frontendFlashcard,
+	};
+};
+
+export const convertFlashcardToFrontendFlashcard = (
+	flashcard: IFlashcard
+): IFrontendFlashcard => {
+	return {
+		...flashcard,
+		userIsDeleting: false,
+	};
+};
+
 export interface IPatchFlashcard {
 	category?: string;
 	front?: string;

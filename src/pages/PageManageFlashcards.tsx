@@ -11,7 +11,7 @@ import {
 } from "../shared/interfaces";
 
 export const PageManageFlashcards = () => {
-	const { flashcards, saveAddFlashcard, deleteFlashcard } =
+	const { frontendFlashcards, saveAddFlashcard, deleteFlashcard } =
 		useContext(AppContext);
 	const [isAddingFlashcard, setIsAddingFlashcard] = useState(false);
 	const [newFlashcard, setNewFlashcard] = useState<INewFlashcard>(
@@ -58,17 +58,28 @@ export const PageManageFlashcards = () => {
 		}
 	};
 
-	const handleDeleteFlashcard = (flashcard: IFlashcard) => {
-		deleteFlashcard(flashcard);
-		// (async () => {
-		// 	const response = await handleDeleteFlashcard(flashcard);
-		// 	console.log("response", response);
-		// })();
+	const handleDeleteFlashcard = (frontendFlashcard: IFlashcard) => {
+		try {
+			(async () => {
+				const response = await deleteFlashcard(flashcard);
+				if (response.message === "ok") {
+					handleCancelAddFlashcard();
+				}
+			})();
+		} catch (e: any) {
+			console.log(`ERROR: ${e.message}`);
+			alert(
+				"We're sorry, your flashcard could not be saved at this moment."
+			);
+		}
 	};
 
 	return (
 		<>
-			<p>This is the info page with {flashcards.length} flashcards.</p>
+			<p>
+				This is the info page with {frontendFlashcards.length}{" "}
+				flashcards.
+			</p>
 			<form action="">
 				<table className="dataTable mt-4 w-[60rem]">
 					<thead>
@@ -150,20 +161,20 @@ export const PageManageFlashcards = () => {
 								</td>
 							</tr>
 						)}
-						{flashcards.map((flashcard) => {
+						{frontendFlashcards.map((frontendFlashcard) => {
 							return (
-								<tr key={flashcard.suuid}>
-									<td>{flashcard.suuid}</td>
-									<td>{flashcard.category}</td>
-									<td>{flashcard.front}</td>
-									<td>{flashcard.back}</td>
+								<tr key={frontendFlashcard.suuid}>
+									<td>{frontendFlashcard.suuid}</td>
+									<td>{frontendFlashcard.category}</td>
+									<td>{frontendFlashcard.front}</td>
+									<td>{frontendFlashcard.back}</td>
 									<td>
 										<div className="flex gap-2 h-full">
 											<MdEdit className="hover:text-green-400 cursor-pointer" />
 											<RiDeleteBin5Line
 												onClick={() =>
 													handleDeleteFlashcard(
-														flashcard
+														frontendFlashcard
 													)
 												}
 												className="hover:text-red-500 cursor-pointer"
