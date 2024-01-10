@@ -11,6 +11,7 @@ interface IAppContext {
 	saveAddFlashcard: (
 		newFlashcard: INewFlashcard
 	) => Promise<IPromiseResolution>;
+	deleteFlashcard: (flashcard: IFlashcard) => void;
 }
 interface IAppProvider {
 	children: React.ReactNode;
@@ -64,11 +65,14 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		});
 	};
 
+	const deleteFlashcard = (flashcard: IFlashcard) => {};
+
 	return (
 		<AppContext.Provider
 			value={{
 				flashcards,
 				saveAddFlashcard,
+				deleteFlashcard,
 			}}
 		>
 			{children}

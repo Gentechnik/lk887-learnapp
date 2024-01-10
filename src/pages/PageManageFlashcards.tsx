@@ -4,10 +4,15 @@ import { MdEdit, MdCancel } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { SiOneplus } from "react-icons/si";
 import { FaRegSave } from "react-icons/fa";
-import { INewFlashcard, blankNewFlashcard } from "../shared/interfaces";
+import {
+	IFlashcard,
+	INewFlashcard,
+	blankNewFlashcard,
+} from "../shared/interfaces";
 
 export const PageManageFlashcards = () => {
-	const { flashcards, saveAddFlashcard } = useContext(AppContext);
+	const { flashcards, saveAddFlashcard, deleteFlashcard } =
+		useContext(AppContext);
 	const [isAddingFlashcard, setIsAddingFlashcard] = useState(false);
 	const [newFlashcard, setNewFlashcard] = useState<INewFlashcard>(
 		structuredClone(blankNewFlashcard)
@@ -52,6 +57,15 @@ export const PageManageFlashcards = () => {
 			);
 		}
 	};
+
+	const handleDeleteFlashcard = (flashcard: IFlashcard) => {
+		deleteFlashcard(flashcard);
+		// (async () => {
+		// 	const response = await handleDeleteFlashcard(flashcard);
+		// 	console.log("response", response);
+		// })();
+	};
+
 	return (
 		<>
 			<p>This is the info page with {flashcards.length} flashcards.</p>
@@ -146,7 +160,12 @@ export const PageManageFlashcards = () => {
 									<td>
 										<div className="flex gap-2 h-full">
 											<MdEdit className="hover:text-green-400 cursor-pointer" />
-											<RiDeleteBin5Line className="hover:text-red-500 cursor-pointer" />
+											<RiDeleteBin5Line
+												onClick={handleDeleteFlashcard(
+													flashcard
+												)}
+												className="hover:text-red-500 cursor-pointer"
+											/>
 										</div>
 									</td>
 								</tr>
