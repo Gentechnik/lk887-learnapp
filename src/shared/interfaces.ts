@@ -56,3 +56,5 @@ export interface IPatchFlashcard {
 	front?: string;
 	back?: string;
 }
+
+export type TSiteEnvironment = "development" | "production";

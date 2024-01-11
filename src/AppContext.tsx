@@ -5,6 +5,7 @@ import {
 	IFrontendFlashcard,
 	INewFlashcard,
 	IPromiseResolution,
+	TSiteEnvironment,
 	convertFlashcardToFrontendFlashcard,
 } from "./shared/interfaces";
 import axios from "axios";
@@ -18,7 +19,7 @@ interface IAppContext {
 	deleteFlashcard: (flashcard: IFlashcard) => Promise<IPromiseResolution>;
 	toggleRowEditing: (frontendFlashcard: IFrontendFlashcard) => void;
 	saveEditFlashcard: (flashcard: IFlashcard) => Promise<IPromiseResolution>;
-	siteEnvironment: string;
+	siteEnvironment: TSiteEnvironment;
 }
 
 interface IAppProvider {
@@ -26,8 +27,8 @@ interface IAppProvider {
 }
 
 const backendUrl = "http://localhost:4011";
-const siteEnvironment = import.meta.env.VITE_ENV;
-console.log(siteEnvironment);
+const siteEnvironment: TSiteEnvironment = import.meta.env.VITE_ENV;
+// console.log(siteEnvironment);
 
 export const AppContext = createContext<IAppContext>({} as IAppContext);
 

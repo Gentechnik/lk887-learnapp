@@ -7,7 +7,7 @@ export const PageWelcome = () => {
 		<>
 			<p>This is the welcome page.</p>
 			<p>
-				Site is running in <b>{siteEnvironment}</b>mode
+				Site is running in <b>{siteEnvironment}</b> mode
 			</p>
 		</>
 	);
