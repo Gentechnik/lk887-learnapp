@@ -25,7 +25,9 @@ export const PageFlashcards = () => {
 					return (
 						<Flashcard
 							testingFlashcard={testingFlashcard}
-							// onClick={}
+							testingFlashcards={testingFlashcards}
+							setTestingFlashcards={setTestingFlashcards}
+							key={testingFlashcard.suuid}
 						/>
 					);
 				})}

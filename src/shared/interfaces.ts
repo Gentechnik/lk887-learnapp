@@ -1,5 +1,3 @@
-import { Flashcard } from "../components/Flashcard";
-
 export interface INewFlashcard {
 	category: string;
 	front: string;
