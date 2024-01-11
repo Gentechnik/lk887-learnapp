@@ -18,6 +18,7 @@ interface IAppContext {
 	deleteFlashcard: (flashcard: IFlashcard) => Promise<IPromiseResolution>;
 	toggleRowEditing: (frontendFlashcard: IFrontendFlashcard) => void;
 	saveEditFlashcard: (flashcard: IFlashcard) => Promise<IPromiseResolution>;
+	siteEnvironment: string;
 }
 
 interface IAppProvider {
@@ -25,6 +26,8 @@ interface IAppProvider {
 }
 
 const backendUrl = "http://localhost:4011";
+const siteEnvironment = import.meta.env.VITE_ENV;
+console.log(siteEnvironment);
 
 export const AppContext = createContext<IAppContext>({} as IAppContext);
 
@@ -159,6 +162,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				deleteFlashcard,
 				toggleRowEditing,
 				saveEditFlashcard,
+				siteEnvironment,
 			}}
 		>
 			{children}
