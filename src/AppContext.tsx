@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useEffect, useState } from "react";
 import {
 	IFlashcard,
@@ -15,7 +16,10 @@ interface IAppContext {
 		newFlashcard: INewFlashcard
 	) => Promise<IPromiseResolution>;
 	deleteFlashcard: (flashcard: IFlashcard) => Promise<IPromiseResolution>;
+	toggleRowEditing: (frontendFlashcard: IFrontendFlashcard) => void;
+	saveEditFlashcard: (flashcard: IFlashcard) => Promise<IPromiseResolution>;
 }
+
 interface IAppProvider {
 	children: React.ReactNode;
 }
@@ -35,10 +39,8 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			const _flashcards = response.data;
 			const _frontendFlashcards = [];
 			for (const _flashcard of _flashcards) {
-				const _frontendFlashcard: IFrontendFlashcard = {
-					..._flashcard,
-					userIsDeleting: false,
-				};
+				const _frontendFlashcard: IFrontendFlashcard =
+					convertFlashcardToFrontendFlashcard(_flashcard);
 				_frontendFlashcards.push(_frontendFlashcard);
 			}
 			setFrontendFlashcards(_frontendFlashcards);
@@ -63,9 +65,42 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 						const frontendFlashcard =
 							convertFlashcardToFrontendFlashcard(flashcard);
 						frontendFlashcards.unshift(frontendFlashcard);
-						const _frontendFlashcards =
-							structuredClone(frontendFlashcards);
-						setFrontendFlashcards(_frontendFlashcards);
+						setFrontendFlashcards(
+							structuredClone(frontendFlashcards)
+						);
+						resolve({ message: "ok" });
+					} else {
+						reject({
+							message: `ERROR: status code ${response.status}`,
+						});
+					}
+				} catch (e: any) {
+					reject({
+						message: `ERROR: ${e.message}`,
+					});
+				}
+			})();
+		});
+	};
+
+	const saveEditFlashcard = async (flashcard: IFlashcard) => {
+		return new Promise<IPromiseResolution>((resolve, reject) => {
+			const headers = {
+				"Access-Control-Allow-Origin": "*",
+				"Content-Type": "application/json",
+			};
+			(async () => {
+				try {
+					const response = await axios.put(
+						`${backendUrl}/api/flashcards`,
+						flashcard,
+						{ headers }
+					);
+					if (response.status === 200) {
+						// const flashcard: IFlashcard = response.data;
+						// const frontendFlashcard =
+						// 	convertFlashcardToFrontendFlaschard(flashcard);
+						// TODO: save data from backend flashcard
 						resolve({ message: "ok" });
 					} else {
 						reject({
@@ -110,13 +145,20 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		});
 	};
 
+	const toggleRowEditing = (frontendFlashcard: IFrontendFlashcard) => {
+		frontendFlashcard.userIsEditing = !frontendFlashcard.userIsEditing;
+		setFrontendFlashcards(structuredClone(frontendFlashcards));
+	};
+
 	return (
 		<AppContext.Provider
 			value={{
 				frontendFlashcards,
-				saveAddFlashcard,
 				setFrontendFlashcards,
+				saveAddFlashcard,
 				deleteFlashcard,
+				toggleRowEditing,
+				saveEditFlashcard,
 			}}
 		>
 			{children}

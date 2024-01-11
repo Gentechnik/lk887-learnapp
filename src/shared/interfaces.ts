@@ -50,3 +50,9 @@ export interface IDatabase {
 export interface IPromiseResolution {
 	message: string;
 }
+
+export interface IPatchFlashcard {
+	category?: string;
+	front?: string;
+	back?: string;
+}

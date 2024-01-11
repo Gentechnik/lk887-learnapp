@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MdCancel, MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import {
@@ -12,8 +13,12 @@ interface IProps {
 }
 
 export const FlashcardTableMainRow = ({ frontendFlashcard }: IProps) => {
-	const { deleteFlashcard, setFrontendFlashcards, frontendFlashcards } =
-		useContext(AppContext);
+	const {
+		deleteFlashcard,
+		setFrontendFlashcards,
+		frontendFlashcards,
+		toggleRowEditing,
+	} = useContext(AppContext);
 
 	const handleDeleteFlashcard = (frontendFlashcard: IFrontendFlashcard) => {
 		(async () => {
@@ -64,7 +69,10 @@ export const FlashcardTableMainRow = ({ frontendFlashcard }: IProps) => {
 					</div>
 				) : (
 					<div className="flex gap-1">
-						<MdModeEditOutline className="cursor-pointer hover:text-green-900" />
+						<MdModeEditOutline
+							onClick={() => toggleRowEditing(frontendFlashcard)}
+							className="cursor-pointer hover:text-green-900"
+						/>
 						<RiDeleteBin6Line
 							onClick={() =>
 								handleSetFlashcardToDeleting(frontendFlashcard)
