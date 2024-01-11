@@ -1,3 +1,5 @@
+import { Flashcard } from "../components/Flashcard";
+
 export interface INewFlashcard {
 	category: string;
 	front: string;
@@ -12,6 +14,9 @@ export const blankNewFlashcard: INewFlashcard = {
 
 export interface IFlashcard extends INewFlashcard {
 	suuid: string;
+}
+export interface ITestingFlashcard extends IFlashcard {
+	backIsShowing: boolean;
 }
 
 export interface IFrontendFlashcard extends IFlashcard {
@@ -37,6 +42,14 @@ export const convertFlashcardToFrontendFlashcard = (
 	};
 };
 
+export const convertFlashcardToTestingFlaschard = (
+	flashcard: IFlashcard
+): ITestingFlashcard => {
+	return {
+		...flashcard,
+		backIsShowing: false,
+	};
+};
 export interface IPatchFlashcard {
 	category?: string;
 	front?: string;
