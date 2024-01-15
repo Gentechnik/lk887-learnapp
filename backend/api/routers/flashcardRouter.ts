@@ -5,6 +5,7 @@ import {
 	INewFlashcard,
 	IPatchFlashcard,
 } from "../../../src/shared/interfaces";
+import { flashcardSuuidValidate } from "../middleware/flashcardSuuidValidate";
 
 export const flashcardRouter = Router();
 
@@ -13,7 +14,7 @@ flashcardRouter.get("/", (_req, res) => {
 	res.json(flashcards);
 });
 
-flashcardRouter.get("/:suuid", (req, res) => {
+flashcardRouter.get("/:suuid", flashcardSuuidValidate, (req, res) => {
 	const suuid = req.params.suuid;
 	const flashcard = flashcardHandlers.getOneFlashcard(suuid);
 	if (flashcard) {
@@ -42,7 +43,7 @@ flashcardRouter.put("/", async (req, res) => {
 	}
 });
 
-flashcardRouter.patch("/:suuid", async (req, res) => {
+flashcardRouter.patch("/:suuid", flashcardSuuidValidate, async (req, res) => {
 	const suuid = req.params.suuid;
 	const patchFlashcard: IPatchFlashcard = req.body;
 	const replacedFlashcard =
@@ -57,7 +58,7 @@ flashcardRouter.patch("/:suuid", async (req, res) => {
 	}
 });
 
-flashcardRouter.delete("/:suuid", async (req, res) => {
+flashcardRouter.delete("/:suuid", flashcardSuuidValidate, async (req, res) => {
 	const suuid = req.params.suuid;
 	const deletedFlashcard = await flashcardHandlers.deleteFlashcard(suuid);
 	if (deletedFlashcard) {
