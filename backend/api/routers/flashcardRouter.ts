@@ -7,6 +7,7 @@ import {
 } from "../../../src/shared/interfaces";
 import { flashcardSuuidValidate } from "../middleware/flashcardSuuidValidate";
 import { flashcardPostCleanAndValidate } from "../middleware/flashcardPostCleanAndValidate";
+import { logger } from "../logger";
 
 export const flashcardRouter = Router();
 
@@ -61,10 +62,12 @@ flashcardRouter.patch("/:suuid", flashcardSuuidValidate, async (req, res) => {
 
 flashcardRouter.delete("/:suuid", flashcardSuuidValidate, async (req, res) => {
 	const suuid = req.params.suuid;
+	logger.debug("deleted suuid: " + suuid);
 	const deletedFlashcard = await flashcardHandlers.deleteFlashcard(suuid);
 	if (deletedFlashcard) {
 		res.json(deletedFlashcard);
 	} else {
+		logger.warn("user tried to delete following suuid: " + suuid);
 		res.status(404).json(`Flashcard with suuid "${suuid}" not found.`);
 	}
 });
