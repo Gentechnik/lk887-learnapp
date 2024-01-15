@@ -9,7 +9,7 @@ const db = await getDb();
 
 export const getAllFlashcards = () => {
 	if (db === null) {
-		return "ball";
+		throw new Error("ERROR: database does not exist");
 	}
 	return db.data.flashcards;
 };
