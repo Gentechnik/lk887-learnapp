@@ -7,6 +7,10 @@ export const maintenanceMode = (
 	res: express.Response,
 	next: express.NextFunction
 ) => {
-	console.log("in maintenance mode middleware");
+	// console.log("in maintenance mode middleware");
+	const apiStatus = config.apiStatus();
+	if (apiStatus.status === "maintenanceMode") {
+		res.status(503);
+	}
 	next();
 };
