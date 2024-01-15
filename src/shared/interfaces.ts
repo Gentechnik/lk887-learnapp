@@ -69,3 +69,8 @@ export interface IPatchFlashcard {
 }
 
 export type TSiteEnvironment = "development" | "production";
+
+export type TApiStatus = {
+	status: "live" | "maintenanceMode";
+	whenLiveAgainDateTime: string;
+};
