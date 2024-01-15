@@ -8,6 +8,9 @@ import { getDb, getSuuid } from "./dbtools";
 const db = await getDb();
 
 export const getAllFlashcards = () => {
+	if (db === null) {
+		return "ball";
+	}
 	return db.data.flashcards;
 };
 
