@@ -8,8 +8,11 @@ import {
 import { flashcardSuuidValidate } from "../middleware/flashcardSuuidValidate";
 import { flashcardPostCleanAndValidate } from "../middleware/flashcardPostCleanAndValidate";
 import { logger } from "../logger";
+import { flashcardInfoRouter } from "./flashcardInfoRouter";
 
 export const flashcardRouter = Router();
+
+flashcardRouter.use("/info", flashcardInfoRouter);
 
 flashcardRouter.get("/", (_req, res) => {
 	const flashcards = flashcardHandlers.getAllFlashcards();
@@ -62,7 +65,6 @@ flashcardRouter.patch("/:suuid", flashcardSuuidValidate, async (req, res) => {
 
 flashcardRouter.delete("/:suuid", flashcardSuuidValidate, async (req, res) => {
 	const suuid = req.params.suuid;
-	logger.debug("deleted suuid: " + suuid);
 	const deletedFlashcard = await flashcardHandlers.deleteFlashcard(suuid);
 	if (deletedFlashcard) {
 		res.json(deletedFlashcard);

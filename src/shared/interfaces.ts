@@ -13,6 +13,7 @@ export const blankNewFlashcard: INewFlashcard = {
 export interface IFlashcard extends INewFlashcard {
 	suuid: string;
 }
+
 export interface ITestingFlashcard extends IFlashcard {
 	backIsShowing: boolean;
 }
@@ -22,32 +23,6 @@ export interface IFrontendFlashcard extends IFlashcard {
 	userIsEditing: boolean;
 }
 
-export const convertFrontendFlashcardToFlashcard = (
-	frontendFlashcard: IFrontendFlashcard
-): IFlashcard => {
-	return {
-		...frontendFlashcard,
-	};
-};
-
-export const convertFlashcardToFrontendFlashcard = (
-	flashcard: IFlashcard
-): IFrontendFlashcard => {
-	return {
-		...flashcard,
-		userIsDeleting: false,
-		userIsEditing: false,
-	};
-};
-
-export const convertFlashcardToTestingFlaschard = (
-	flashcard: IFlashcard
-): ITestingFlashcard => {
-	return {
-		...flashcard,
-		backIsShowing: false,
-	};
-};
 export interface IPatchFlashcard {
 	category?: string;
 	front?: string;
@@ -62,15 +37,50 @@ export interface IPromiseResolution {
 	message: string;
 }
 
-export interface IPatchFlashcard {
-	category?: string;
-	front?: string;
-	back?: string;
-}
+export const convertFlashcardToFrontendFlaschard = (
+	flashcard: IFlashcard
+): IFrontendFlashcard => {
+	return {
+		...flashcard,
+		userIsDeleting: false,
+		userIsEditing: false,
+	};
+};
 
-export type TSiteEnvironment = "development" | "production";
+export const convertFrontendFlashcardToFlaschard = (
+	frontendFlashcard: IFrontendFlashcard
+): IFlashcard => {
+	return {
+		suuid: frontendFlashcard.suuid,
+		category: frontendFlashcard.category,
+		front: frontendFlashcard.front,
+		back: frontendFlashcard.back,
+	};
+};
 
-export type TApiStatus = {
+export type ISiteEnvironment = "development" | "production";
+
+export const convertFlashcardToTestingFlaschard = (
+	flashcard: IFlashcard
+): ITestingFlashcard => {
+	return {
+		...flashcard,
+		backIsShowing: false,
+	};
+};
+
+export type IApiStatus = {
 	status: "live" | "maintenanceMode";
 	whenLiveAgainDateTime: string;
 };
+
+export interface ILogItem {
+	timestamp: string;
+	level: string;
+	message: string;
+	method: string;
+	status: string;
+	remoteAddr: string;
+	url: string;
+	responseTime: string;
+}
