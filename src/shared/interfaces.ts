@@ -37,7 +37,7 @@ export interface IPromiseResolution {
 	message: string;
 }
 
-export const convertFlashcardToFrontendFlaschard = (
+export const convertFlashcardToFrontendFlashcard = (
 	flashcard: IFlashcard
 ): IFrontendFlashcard => {
 	return {
@@ -47,7 +47,7 @@ export const convertFlashcardToFrontendFlaschard = (
 	};
 };
 
-export const convertFrontendFlashcardToFlaschard = (
+export const convertFrontendFlashcardToFlashcard = (
 	frontendFlashcard: IFrontendFlashcard
 ): IFlashcard => {
 	return {
@@ -58,7 +58,7 @@ export const convertFrontendFlashcardToFlaschard = (
 	};
 };
 
-export type ISiteEnvironment = "development" | "production";
+export type TSiteEnvironment = "development" | "production";
 
 export const convertFlashcardToTestingFlaschard = (
 	flashcard: IFlashcard
@@ -69,7 +69,7 @@ export const convertFlashcardToTestingFlaschard = (
 	};
 };
 
-export type IApiStatus = {
+export type TApiStatus = {
 	status: "live" | "maintenanceMode";
 	whenLiveAgainDateTime: string;
 };

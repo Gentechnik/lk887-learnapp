@@ -1,3 +1,7 @@
 {"level":"debug","message":"deleted suuid: asd165","timestamp":"2024-01-15T12:44:00.458Z"}
 {"level":"warn","message":"user tried to delete following suuid: asd165","timestamp":"2024-01-15T12:44:00.464Z"}
 {"contentLength":"567","level":"http","message":"incoming-request","method":"GET","remoteAddr":"::1","responseTime":"1.146","status":"200","timestamp":"2024-01-15T13:06:29.382Z","url":"/api/flashcards/"}
+{"contentLength":"42","level":"http","message":"incoming-request","method":"GET","remoteAddr":"::ffff:127.0.0.1","responseTime":"4.907","status":"200","timestamp":"2024-01-16T08:41:02.556Z","url":"/"}
+{"contentLength":"42","level":"http","message":"incoming-request","method":"GET","remoteAddr":"::ffff:127.0.0.1","responseTime":"10.333","status":"201","timestamp":"2024-01-16T08:43:25.350Z","url":"/"}
+{"contentLength":"42","level":"http","message":"incoming-request","method":"GET","remoteAddr":"::ffff:127.0.0.1","responseTime":"3.422","status":"201","timestamp":"2024-01-16T08:45:57.770Z","url":"/"}
+{"contentLength":"42","level":"http","message":"incoming-request","method":"GET","remoteAddr":"::ffff:127.0.0.1","responseTime":"6.259","status":"200","timestamp":"2024-01-16T08:47:48.806Z","url":"/"}
